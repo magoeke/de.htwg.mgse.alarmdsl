@@ -1,5 +1,6 @@
 package alarmclock;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
@@ -10,6 +11,106 @@ public final class AlarmClock {
 		allAlarms = new LinkedList<GregorianCalendar>();
 	}
 	
+	/**
+	 * Just for Development purposes
+	 * @return
+	 */
+	public void printVars() {
+		System.out.println(new GregorianCalendar());
+		for(GregorianCalendar alarm : allAlarms) {
+			System.out.println(alarm);
+		}
+	}
+	
+	public MinuteScope in(){
+		return new MinuteScope(new GregorianCalendar());
+	}
+	
+	public YearScope on() {
+		return new YearScope(new GregorianCalendar());
+	}
+	
+	public HourScope at() {
+		return new HourScope(new GregorianCalendar());
+	}
 	
 	
+	
+	/**
+	 * 
+	 *
+	 */
+	public final class MinuteScope{
+		private GregorianCalendar c;
+		private MinuteScope(GregorianCalendar c) { this.c = c;}
+		public void minutes(int minutes){
+			c.add(Calendar.MINUTE, minutes);
+			allAlarms.add(c);
+		}
+	}
+	
+	public final class YearScope{
+		private GregorianCalendar c;
+		private YearScope(GregorianCalendar c) { this.c = c;}
+		public MonthScope year(int year){
+			c.set(Calendar.YEAR, year);
+			return new MonthScope(c);
+		}
+		
+		public MonthScope thisYear() { return new MonthScope(c); }
+	}
+	
+	/**
+	 * 
+	 */
+	public final class MonthScope{
+		private GregorianCalendar c;
+		private MonthScope(GregorianCalendar c) { this.c = c;}
+		
+		public DayScope month(int year){
+			c.set(Calendar.YEAR, year);
+			return new DayScope(c);
+		}
+		
+		public DayScope thisMonth() { return new DayScope(c); }
+	}
+	
+	public final class DayScope{
+		private GregorianCalendar c;
+		private DayScope(GregorianCalendar c) { this.c = c;}
+		public TimeWrapperScope day(int day){
+			c.set(Calendar.DAY_OF_MONTH, day);
+			return new TimeWrapperScope(c);
+		}
+		
+		public TimeWrapperScope today() { return new TimeWrapperScope(c); }
+	}
+	
+	public final class TimeWrapperScope {
+		private GregorianCalendar c;
+		private TimeWrapperScope(GregorianCalendar c) { this.c = c;}
+		public HourScope at() {
+			return new HourScope(c);
+		}
+	}
+	
+	public final class HourScope {
+		private GregorianCalendar c;
+		private HourScope(GregorianCalendar c) { this.c = c;}
+		public TimeMinuteScope hour(int hour){
+			c.set(Calendar.HOUR_OF_DAY, hour);
+			return new TimeMinuteScope(c);
+		}
+	}
+	
+	public final class TimeMinuteScope {
+		private GregorianCalendar c;
+		private TimeMinuteScope(GregorianCalendar c) { this.c = c;}
+		public void minute(int minute){
+			c.set(Calendar.MINUTE, minute);
+//			return new TimeMinuteScope(c);
+		}
+		
+		
+	}
 }
