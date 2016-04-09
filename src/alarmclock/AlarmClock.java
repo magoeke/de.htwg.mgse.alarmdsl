@@ -30,8 +30,12 @@ public final class AlarmClock {
 		return new YearScope(new GregorianCalendar());
 	}
 	
-	public HourScope at() {
-		return new HourScope(new GregorianCalendar());
+	public WeekScope every() {
+		return new WeekScope(new GregorianCalendar());
+	}
+	
+	public TimeWrapperScope today() { 
+		return new TimeWrapperScope(new GregorianCalendar()); 
 	}
 	
 	
@@ -58,8 +62,6 @@ public final class AlarmClock {
 		}
 		
 		public MonthScope thisYear() { return new MonthScope(c); }
-		
-		public TimeWrapperScope today() { return new TimeWrapperScope(c); }
 	}
 	
 	/**
@@ -109,8 +111,30 @@ public final class AlarmClock {
 		public void minute(int minute){
 			c.set(Calendar.MINUTE, minute);
 //			return new TimeMinuteScope(c);
+		}	
+	}
+	
+	public final class WeekScope {
+		private GregorianCalendar c;
+		private WeekScope(GregorianCalendar c) { this.c = c;}
+		public DayWrapperScope weeks(int week){
+//			c.set(Calendar.MINUTE, minute);
+			return new DayWrapperScope(c);
+		}
+		public DayWrapperScope week(){
+//			c.set(Calendar.MINUTE, minute);
+			return new DayWrapperScope(c);
+		}
+	}
+	
+	public final class DayWrapperScope {
+		private GregorianCalendar c;
+		private DayWrapperScope(GregorianCalendar c) { this.c = c;}
+		public TimeWrapperScope on(Day day){
+			return new TimeWrapperScope(c);
 		}
 		
-		
+	    //array?
 	}
+	
 }
