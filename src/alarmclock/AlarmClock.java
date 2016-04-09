@@ -58,6 +58,8 @@ public final class AlarmClock {
 		}
 		
 		public MonthScope thisYear() { return new MonthScope(c); }
+		
+		public TimeWrapperScope today() { return new TimeWrapperScope(c); }
 	}
 	
 	/**
@@ -67,8 +69,8 @@ public final class AlarmClock {
 		private GregorianCalendar c;
 		private MonthScope(GregorianCalendar c) { this.c = c;}
 		
-		public DayScope month(int year){
-			c.set(Calendar.YEAR, year);
+		public DayScope month(int month){
+			c.set(Calendar.MONTH, month);
 			return new DayScope(c);
 		}
 		
@@ -82,8 +84,6 @@ public final class AlarmClock {
 			c.set(Calendar.DAY_OF_MONTH, day);
 			return new TimeWrapperScope(c);
 		}
-		
-		public TimeWrapperScope today() { return new TimeWrapperScope(c); }
 	}
 	
 	public final class TimeWrapperScope {
