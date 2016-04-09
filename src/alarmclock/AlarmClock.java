@@ -20,15 +20,22 @@ public final class AlarmClock {
 	}
 	
 	public TimeWrapperScope on(Day day) {
-		return new TimeWrapperScope(new GregorianCalendar());
+		WeekAndDayMemorie wadm = new WeekAndDayMemorie();
+		GregorianCalendar c = new GregorianCalendar();
+		wadm.addDay(day);
+		int oldVal = c.get(Calendar.DAY_OF_MONTH);
+		c.set(Calendar.DAY_OF_WEEK, (day.ordinal()+2 > 7) ? 1 : day.ordinal()+2);
+		// Fallback
+		if(oldVal > c.get(Calendar.DAY_OF_MONTH)) { c.add(Calendar.WEEK_OF_YEAR, 1);}
+		return new TimeWrapperScope(c, wadm);
 	}
 	
 	public WeekScope every() {
-		return new WeekScope(new GregorianCalendar());
+		return new WeekScope(new GregorianCalendar(), new WeekAndDayMemorie());
 	}
 	
 	public TimeWrapperScope today() { 
-		return new TimeWrapperScope(new GregorianCalendar()); 
+		return new TimeWrapperScope(new GregorianCalendar(), null); 
 	}
 	
 	public final class MinuteScope{
@@ -56,7 +63,7 @@ public final class AlarmClock {
 		private MonthScope(GregorianCalendar c) { this.c = c;}
 		
 		public DayScope month(int month){
-			c.set(Calendar.MONTH, month);
+			c.set(Calendar.MONTH, month-1);
 			return new DayScope(c);
 		}
 		
@@ -68,56 +75,105 @@ public final class AlarmClock {
 		private DayScope(GregorianCalendar c) { this.c = c;}
 		public TimeWrapperScope day(int day){
 			c.set(Calendar.DAY_OF_MONTH, day);
-			return new TimeWrapperScope(c);
+			return new TimeWrapperScope(c, null);
 		}
 	}
 	
 	public final class TimeWrapperScope {
 		private GregorianCalendar c;
-		private TimeWrapperScope(GregorianCalendar c) { this.c = c;}
+		private WeekAndDayMemorie wadm;
+		
+		private TimeWrapperScope(GregorianCalendar c, WeekAndDayMemorie wadm) { 
+			this.c = c;
+			this.wadm = wadm;
+		}
+		
 		public HourScope at() {
-			return new HourScope(c);
+			return new HourScope(c, wadm);
 		}
 	}
 	
 	public final class HourScope {
 		private GregorianCalendar c;
-		private HourScope(GregorianCalendar c) { this.c = c;}
+		private WeekAndDayMemorie wadm;
+		private HourScope(GregorianCalendar c, WeekAndDayMemorie wadm) { 
+			this.c = c;
+			this.wadm = wadm;
+		}
 		public TimeMinuteScope hour(int hour){
 			c.set(Calendar.HOUR_OF_DAY, hour);
-			return new TimeMinuteScope(c);
+			return new TimeMinuteScope(c, wadm);
 		}
 	}
 	
 	public final class TimeMinuteScope {
 		private GregorianCalendar c;
-		private TimeMinuteScope(GregorianCalendar c) { this.c = c;}
-		public void minute(int minute){
+		private WeekAndDayMemorie wadm;
+		
+		private TimeMinuteScope(GregorianCalendar c, WeekAndDayMemorie wadm) { 
+			this.c = c;
+			this.wadm = wadm;
+		}
+		public AlarmProperties minute(int minute){
 			c.set(Calendar.MINUTE, minute);
-//			return new TimeMinuteScope(c);
+			return new AlarmProperties(c, wadm);
 		}	
 	}
 	
 	public final class WeekScope {
 		private GregorianCalendar c;
-		private WeekScope(GregorianCalendar c) { this.c = c;}
-		public DayWrapperScope weeks(int week){
-//			c.set(Calendar.MINUTE, minute);
-			return new DayWrapperScope(c);
+		private WeekAndDayMemorie wadm;
+		private WeekScope(GregorianCalendar c, WeekAndDayMemorie wadm) { 
+			this.c = c;
+			this.wadm = wadm;
+		}
+		public DayWrapperScope weeks(int weeks){
+			wadm.setWeeks(weeks);
+			return new DayWrapperScope(c, wadm);
 		}
 		public DayWrapperScope week(){
-//			c.set(Calendar.MINUTE, minute);
-			return new DayWrapperScope(c);
+			wadm.setWeeks(1);
+			return new DayWrapperScope(c, wadm);
 		}
 	}
 	
 	public final class DayWrapperScope {
 		private GregorianCalendar c;
-		private DayWrapperScope(GregorianCalendar c) { this.c = c;}
-		public TimeWrapperScope on(Day day){
-			return new TimeWrapperScope(c);
+		private WeekAndDayMemorie wadm;
+		private DayWrapperScope(GregorianCalendar c, WeekAndDayMemorie wadm) { 
+			this.c = c;
+			this.wadm = wadm;
 		}
 		
+		public TimeWrapperScope on(Day day){
+			wadm.addDay(day);
+			int oldVal = c.get(Calendar.DAY_OF_MONTH);
+			c.set(Calendar.DAY_OF_WEEK, (day.ordinal()+2 > 7) ? 1 : day.ordinal()+2);
+			// Fallback
+			if(oldVal > c.get(Calendar.DAY_OF_MONTH)) { c.add(Calendar.WEEK_OF_YEAR, 1);}
+			return new TimeWrapperScope(c, wadm);
+		}
+	}
+	
+	public final class WeekAndDayMemorie{
+		private int weeks;
+		private LinkedList<Day> days;
+		
+		private WeekAndDayMemorie() {
+			weeks = 0;
+			days = new LinkedList<Day>();
+		}
+		
+		public void setWeeks(int weeks) {
+			this.weeks = weeks;
+		}
+		
+		public void addDay(Day day) {
+			if(!this.days.contains(day)) { days.add(day); }
+		}
+		
+		public int getWeeks() { return weeks; }
+		public LinkedList<Day> getDays() { return days; }
 	}
 	
 }
