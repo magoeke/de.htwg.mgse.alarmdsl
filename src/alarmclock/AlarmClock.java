@@ -11,14 +11,25 @@ public final class AlarmClock {
 		allAlarms = new LinkedList<GregorianCalendar>();
 	}
 	
+	/**
+	 * Set alarm in certain time.
+	 */
 	public MinuteScope in(){
 		return new MinuteScope();
 	}
 	
+	
+	/**
+	 * Set alarm in specific year(date).
+	 */
 	public YearScope on() {
 		return new YearScope(new GregorianCalendar());
 	}
 	
+	
+	/**
+	 * Set alarm on specific day or days(monday, tuesday, ...).
+	 */
 	public TimeWrapperScope on(Day ... days) {
 		WeekAndDayMemorie wadm = new WeekAndDayMemorie();
 		GregorianCalendar c = new GregorianCalendar();
@@ -32,14 +43,26 @@ public final class AlarmClock {
 		return new TimeWrapperScope(c, wadm);
 	}
 	
+	
+	/**
+	 * Set repeating alarm.
+	 */
 	public WeekScope every() {
 		return new WeekScope(new GregorianCalendar(), new WeekAndDayMemorie());
 	}
 	
+	
+	/**
+	 * Set alarm for today.
+	 */
 	public TimeWrapperScope today() { 
 		return new TimeWrapperScope(new GregorianCalendar(), null); 
 	}
 	
+	
+	/**
+	 * Adds the minutes to the current timestamp.
+	 */
 	public final class MinuteScope{
 		private MinuteScope() { }
 		public AlarmProperties minutes(int minutes){
@@ -49,6 +72,10 @@ public final class AlarmClock {
 		}
 	}
 	
+	
+	/**
+	 * Sets the year of the alarm.
+	 */
 	public final class YearScope{
 		private GregorianCalendar c;
 		private YearScope(GregorianCalendar c) { this.c = c;}
@@ -60,6 +87,10 @@ public final class AlarmClock {
 		public MonthScope thisYear() { return new MonthScope(c); }
 	}
 	
+	
+	/**
+	 * Sets the month of the alarm.
+	 */
 	public final class MonthScope{
 		private GregorianCalendar c;
 		private MonthScope(GregorianCalendar c) { this.c = c;}
@@ -72,15 +103,24 @@ public final class AlarmClock {
 		public DayScope thisMonth() { return new DayScope(c); }
 	}
 	
+	
+	/**
+	 * Sets the specific day in the month.
+	 */
 	public final class DayScope{
 		private GregorianCalendar c;
 		private DayScope(GregorianCalendar c) { this.c = c;}
+		
 		public TimeWrapperScope day(int day){
 			c.set(Calendar.DAY_OF_MONTH, day);
 			return new TimeWrapperScope(c, null);
 		}
 	}
 	
+	
+	/**
+	 * This is only needed that it looks more like natural language.
+	 */
 	public final class TimeWrapperScope {
 		private GregorianCalendar c;
 		private WeekAndDayMemorie wadm;
@@ -95,19 +135,29 @@ public final class AlarmClock {
 		}
 	}
 	
+	
+	/**
+	 * Sets the hour of the alarm.
+	 */
 	public final class HourScope {
 		private GregorianCalendar c;
 		private WeekAndDayMemorie wadm;
+		
 		private HourScope(GregorianCalendar c, WeekAndDayMemorie wadm) { 
 			this.c = c;
 			this.wadm = wadm;
 		}
+		
 		public TimeMinuteScope hour(int hour){
 			c.set(Calendar.HOUR_OF_DAY, hour);
 			return new TimeMinuteScope(c, wadm);
 		}
 	}
 	
+	
+	/**
+	 * Sets the minute of the alarm
+	 */
 	public final class TimeMinuteScope {
 		private GregorianCalendar c;
 		private WeekAndDayMemorie wadm;
@@ -116,12 +166,18 @@ public final class AlarmClock {
 			this.c = c;
 			this.wadm = wadm;
 		}
+		
 		public AlarmProperties minute(int minute){
 			c.set(Calendar.MINUTE, minute);
 			return new AlarmProperties(c, wadm);
 		}	
 	}
 	
+	
+	/**
+	 * Evaluates the difference between the alarms in weeks.
+	 * Saves the number of weeks and returns a DayWrapperScope.
+	 */
 	public final class WeekScope {
 		private GregorianCalendar c;
 		private WeekAndDayMemorie wadm;
@@ -139,9 +195,15 @@ public final class AlarmClock {
 		}
 	}
 	
+	
+	/**
+	 * Evaluates which Days(Monday, Thuesday,...) the user choose.
+	 * Saves them and returns an TimeWrapperScope Object.
+	 */
 	public final class DayWrapperScope {
 		private GregorianCalendar c;
 		private WeekAndDayMemorie wadm;
+		
 		private DayWrapperScope(GregorianCalendar c, WeekAndDayMemorie wadm) { 
 			this.c = c;
 			this.wadm = wadm;
@@ -151,14 +213,21 @@ public final class AlarmClock {
 			for(Day day:days) {
 				wadm.addDay(day);
 			}
+			
 			int oldVal = c.get(Calendar.DAY_OF_MONTH);
 			c.set(Calendar.DAY_OF_WEEK, (days[0].ordinal()+2 > 7) ? 1 : days[0].ordinal()+2);
 			// Fallback
 			if(oldVal > c.get(Calendar.DAY_OF_MONTH)) { c.add(Calendar.WEEK_OF_YEAR, 1);}
+			
 			return new TimeWrapperScope(c, wadm);
 		}
 	}
+
 	
+	/**
+	 * Helper class. Saves number of weeks and the choosen days.
+	 * It's needed Argument in the constructor of AlarmProperties.
+	 */
 	public final class WeekAndDayMemorie{
 		private int weeks;
 		private LinkedList<Day> days;
