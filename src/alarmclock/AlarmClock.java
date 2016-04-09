@@ -11,19 +11,8 @@ public final class AlarmClock {
 		allAlarms = new LinkedList<GregorianCalendar>();
 	}
 	
-	/**
-	 * Just for Development purposes
-	 * @return
-	 */
-	public void printVars() {
-		System.out.println(new GregorianCalendar());
-		for(GregorianCalendar alarm : allAlarms) {
-			System.out.println(alarm);
-		}
-	}
-	
 	public MinuteScope in(){
-		return new MinuteScope(new GregorianCalendar());
+		return new MinuteScope();
 	}
 	
 	public YearScope on() {
@@ -42,18 +31,12 @@ public final class AlarmClock {
 		return new TimeWrapperScope(new GregorianCalendar()); 
 	}
 	
-	
-	
-	/**
-	 * 
-	 *
-	 */
 	public final class MinuteScope{
-		private GregorianCalendar c;
-		private MinuteScope(GregorianCalendar c) { this.c = c;}
-		public void minutes(int minutes){
+		private MinuteScope() { }
+		public AlarmProperties minutes(int minutes){
+			GregorianCalendar c = new GregorianCalendar();
 			c.add(Calendar.MINUTE, minutes);
-			allAlarms.add(c);
+			return new AlarmProperties(c);
 		}
 	}
 	
@@ -68,9 +51,6 @@ public final class AlarmClock {
 		public MonthScope thisYear() { return new MonthScope(c); }
 	}
 	
-	/**
-	 * 
-	 */
 	public final class MonthScope{
 		private GregorianCalendar c;
 		private MonthScope(GregorianCalendar c) { this.c = c;}
@@ -138,7 +118,6 @@ public final class AlarmClock {
 			return new TimeWrapperScope(c);
 		}
 		
-	    //array?
 	}
 	
 }
