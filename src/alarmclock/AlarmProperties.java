@@ -15,20 +15,6 @@ public class AlarmProperties {
 	private int weeks;
 	private LinkedList<Day> days;
 	
-//	public AlarmProperties() { 
-//	}
-	
-	public AlarmProperties(GregorianCalendar c) {
-		days = new LinkedList<Day>();
-		year = c.get(Calendar.YEAR);
-		month = c.get(Calendar.MONTH)+1;
-		day = c.get(Calendar.DAY_OF_MONTH);
-		hour = c.get(Calendar.HOUR_OF_DAY);
-		minute = c.get(Calendar.MINUTE);
-		weeks = 0;
-//		days.add(c.get(Calendar.DAY_OF_WEEK));
-	}
-	
 	public AlarmProperties(GregorianCalendar c, WeekAndDayMemorie wadm) {
 		days = new LinkedList<Day>();
 		year = c.get(Calendar.YEAR);

@@ -1,6 +1,9 @@
 package alarmclock;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 public class TestAlarmClock {
 
@@ -16,7 +19,7 @@ public class TestAlarmClock {
 		System.out.println(ap);
 		System.out.println();
 		
-		ap = alarm.every().weeks(2).on(Day.SUNDAY).at().hour(22).minute(12);
+		ap = alarm.every().weeks(2).on(Day.SUNDAY, Day.SATURDAY).at().hour(22).minute(12);
 		System.out.println(ap);
 		ap = alarm.every().week().on(Day.FRIDAY).at().hour(22).minute(12);
 		System.out.println(ap);
@@ -29,6 +32,13 @@ public class TestAlarmClock {
 //		
 //		
 //		System.out.println((Day.SATURDAY.ordinal()+2 > 7) ? 1 : Day.SATURDAY.ordinal()+2);
+		
+//		Day[] days = { Day.FRIDAY, Day.MONDAY, Day.SATURDAY, Day.SUNDAY, Day.THURSDAY, Day.TUESDAY, Day.WEDNESDAY };
+//		List<Day> daysList = Arrays.asList(days);
+//		Collections.sort(daysList);
+//		for (Day d : daysList) {
+//		    System.out.println(d);
+//		}
 		
 	}
 }

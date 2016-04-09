@@ -19,12 +19,14 @@ public final class AlarmClock {
 		return new YearScope(new GregorianCalendar());
 	}
 	
-	public TimeWrapperScope on(Day day) {
+	public TimeWrapperScope on(Day ... days) {
 		WeekAndDayMemorie wadm = new WeekAndDayMemorie();
 		GregorianCalendar c = new GregorianCalendar();
-		wadm.addDay(day);
+		for(Day day:days) {
+			wadm.addDay(day);
+		}
 		int oldVal = c.get(Calendar.DAY_OF_MONTH);
-		c.set(Calendar.DAY_OF_WEEK, (day.ordinal()+2 > 7) ? 1 : day.ordinal()+2);
+		c.set(Calendar.DAY_OF_WEEK, (days[0].ordinal()+2 > 7) ? 1 : days[0].ordinal()+2);
 		// Fallback
 		if(oldVal > c.get(Calendar.DAY_OF_MONTH)) { c.add(Calendar.WEEK_OF_YEAR, 1);}
 		return new TimeWrapperScope(c, wadm);
@@ -43,7 +45,7 @@ public final class AlarmClock {
 		public AlarmProperties minutes(int minutes){
 			GregorianCalendar c = new GregorianCalendar();
 			c.add(Calendar.MINUTE, minutes);
-			return new AlarmProperties(c);
+			return new AlarmProperties(c, null);
 		}
 	}
 	
@@ -145,10 +147,12 @@ public final class AlarmClock {
 			this.wadm = wadm;
 		}
 		
-		public TimeWrapperScope on(Day day){
-			wadm.addDay(day);
+		public TimeWrapperScope on(Day ... days){
+			for(Day day:days) {
+				wadm.addDay(day);
+			}
 			int oldVal = c.get(Calendar.DAY_OF_MONTH);
-			c.set(Calendar.DAY_OF_WEEK, (day.ordinal()+2 > 7) ? 1 : day.ordinal()+2);
+			c.set(Calendar.DAY_OF_WEEK, (days[0].ordinal()+2 > 7) ? 1 : days[0].ordinal()+2);
 			// Fallback
 			if(oldVal > c.get(Calendar.DAY_OF_MONTH)) { c.add(Calendar.WEEK_OF_YEAR, 1);}
 			return new TimeWrapperScope(c, wadm);
