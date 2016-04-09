@@ -23,12 +23,13 @@ public class AlarmProperties {
 		hour = c.get(Calendar.HOUR_OF_DAY);
 		minute = c.get(Calendar.MINUTE);
 		weeks = 0;
-//		days.add(c.get(Calendar.DAY_OF_WEEK));
+		
 		if(wadm != null) {
 			weeks = wadm.getWeeks();
 			days = wadm.getDays();
 		} else {
-			days.add(Day.values()[(c.get(Calendar.DAY_OF_WEEK)-2 < 0) ? 6 : Calendar.DAY_OF_WEEK-2]);
+			int day = c.get(Calendar.DAY_OF_WEEK);
+			days.add(Day.values()[(day -2 < 0 ) ? 6 : day-2]);
 		}
 	}
 	

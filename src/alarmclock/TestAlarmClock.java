@@ -1,6 +1,7 @@
 package alarmclock;
 
 import java.util.LinkedList;
+import static alarmclock.Day.*;
 
 public class TestAlarmClock {
 
@@ -19,5 +20,9 @@ public class TestAlarmClock {
 		for(AlarmProperties ap : apl) {
 			System.out.println(ap);
 		}
+		
+		System.out.println(alarm.on(FRIDAY).at().hour(22).minute(30));
+		System.out.println( alarm.on().thisYear().thisMonth().day(15).at().hour(22).minute(30) );
+		
 	}
 }
