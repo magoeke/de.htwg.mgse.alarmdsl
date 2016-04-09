@@ -4,12 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
-public final class AlarmClock {
-	private LinkedList<GregorianCalendar> allAlarms;
-	
-	public AlarmClock() {
-		allAlarms = new LinkedList<GregorianCalendar>();
-	}
+public final class AlarmBuilder {
+	public AlarmBuilder() { }
 	
 	/**
 	 * Set alarm in certain time.

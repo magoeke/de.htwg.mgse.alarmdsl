@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
-import alarmclock.AlarmClock.WeekAndDayMemorie;
+import alarmclock.AlarmBuilder.WeekAndDayMemorie;
 
 public class AlarmProperties {
 	private int year;

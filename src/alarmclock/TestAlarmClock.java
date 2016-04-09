@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class TestAlarmClock {
 
 	public static void main(String[] args) {
-		AlarmClock alarm = new AlarmClock();
+		AlarmBuilder alarm = new AlarmBuilder();
 		LinkedList<AlarmProperties> apl = new LinkedList<AlarmProperties>();
 		apl.add(alarm.in().minutes(5));
 		apl.add(alarm.on().thisYear().thisMonth().day(12).at().hour(22).minute(12));
