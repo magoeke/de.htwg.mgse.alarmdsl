@@ -30,6 +30,10 @@ public final class AlarmClock {
 		return new YearScope(new GregorianCalendar());
 	}
 	
+	public TimeWrapperScope on(Day day) {
+		return new TimeWrapperScope(new GregorianCalendar());
+	}
+	
 	public WeekScope every() {
 		return new WeekScope(new GregorianCalendar());
 	}
